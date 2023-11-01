@@ -1,0 +1,80 @@
+{
+    "nama": "Daftar Produk",
+    "data": [
+        {
+            "kode": "HP25",
+            "nama": "HP Omen 25L",
+            "jumlah": 10
+        },
+        {
+            "kode": "LPLT7",
+            "nama": "Lenovo PC Legion T7",
+            "jumlah": 5
+        },
+        {
+            "kode": "ARSG10CE",
+            "nama": "Asus ROG Strix G10CE",
+            "jumlah": 7
+        },
+        {
+            "kode": "DAA01",
+            "nama": "Dell Alienware Aurora",
+            "jumlah": 3
+        },
+        {
+            "kode": "MSI10",
+            "nama": "MSI Trident 10",
+            "jumlah": 2
+        },
+        {
+            "kode": "HPPAV",
+            "nama": "HP Pavilion Gaming PC",
+            "jumlah": 6
+        },
+        {
+            "kode": "LGUNPC",
+            "nama": "LG Ultra PC",
+            "jumlah": 4
+        },
+        {
+            "kode": "MSIMEG",
+            "nama": "MSI MEG Trident X",
+            "jumlah": 9
+        },
+        {
+            "kode": "ASYTM",
+            "nama": "Asus TUF Gaming TM4100",
+            "jumlah": 12
+        },
+        {
+            "kode": "ALPC",
+            "nama": "Alienware Area-51m",
+            "jumlah": 5
+        },
+        {
+            "kode": "LCLEGPC",
+            "nama": "CyberPowerPC Gamer Supreme Liquid Cool",
+            "jumlah": 7
+        },
+        {
+            "kode": "ZOTAC",
+            "nama": "ZOTAC MEK Ultra Gaming PC",
+            "jumlah": 3
+        },
+        {
+            "kode": "HPDV",
+            "nama": "HP Pavilion Desktop",
+            "jumlah": 6
+        },
+        {
+            "kode": "ALPCXM",
+            "nama": "Alienware Aurora R12",
+            "jumlah": 4
+        },
+        {
+            "kode": "OMEGAPC",
+            "nama": "Origin PC Chronos",
+            "jumlah": 5
+        }
+    ]
+}

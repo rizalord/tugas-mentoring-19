@@ -1,0 +1,80 @@
+{
+    "nama": "Daftar Bahan",
+    "data": [
+        {
+            "kode": "CPUi5G8",
+            "nama": "Processor Intel Core i5 Gen 8",
+            "jumlah": 10
+        },
+        {
+            "kode": "GPUrx570",
+            "nama": "AMD Radeon RX 570 GPU",
+            "jumlah": 15
+        },
+        {
+            "kode": "MBAsusB450",
+            "nama": "Asus Prime B450 Motherboard",
+            "jumlah": 8
+        },
+        {
+            "kode": "RAMCorsair8GB",
+            "nama": "Corsair Vengeance LPX 8GB RAM",
+            "jumlah": 20
+        },
+        {
+            "kode": "SSD256GB",
+            "nama": "Samsung 256GB SSD",
+            "jumlah": 12
+        },
+        {
+            "kode": "HDD1TB",
+            "nama": "Seagate 1TB Hard Drive",
+            "jumlah": 18
+        },
+        {
+            "kode": "PSUEVGA500W",
+            "nama": "EVGA 500W Power Supply Unit",
+            "jumlah": 10
+        },
+        {
+            "kode": "GPUMSI1660",
+            "nama": "MSI GeForce GTX 1660 GPU",
+            "jumlah": 10
+        },
+        {
+            "kode": "KBLogitech",
+            "nama": "Logitech G Pro Mechanical Keyboard",
+            "jumlah": 6
+        },
+        {
+            "kode": "MSELogitech",
+            "nama": "Logitech G502 Hero Gaming Mouse",
+            "jumlah": 7
+        },
+        {
+            "kode": "COOLCorsair",
+            "nama": "Corsair H100i RGB Liquid Cooler",
+            "jumlah": 9
+        },
+        {
+            "kode": "CASNZXT",
+            "nama": "NZXT H510 ATX Case",
+            "jumlah": 12
+        },
+        {
+            "kode": "FANSNoctua",
+            "nama": "Noctua NF-F12 PWM Cooling Fans",
+            "jumlah": 15
+        },
+        {
+            "kode": "SPEAKERLogitech",
+            "nama": "Logitech Z623 2.1 Speaker System",
+            "jumlah": 5
+        },
+        {
+            "kode": "MONASUS24",
+            "nama": "Asus 24-inch Full HD Monitor",
+            "jumlah": 8
+        }
+    ]
+}
