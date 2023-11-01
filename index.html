@@ -303,7 +303,7 @@
     // Fetchings
     function fetchProduk() {
       $.ajax({
-        url: window.location.origin + '/data/produk.json',
+        url: window.location.origin + window.location.pathname + '/data/produk.json',
         method: 'GET',
         success: function ({ data }) {
           produkDatatable.clear()
@@ -326,7 +326,7 @@
 
     function fetchBahan() {
       $.ajax({
-        url: window.location.origin + '/data/bahan.json',
+        url: window.location.origin + window.location.pathname + '/data/bahan.json',
         method: 'GET',
         success: function ({ data }) {
           bahanDatatable.clear()
