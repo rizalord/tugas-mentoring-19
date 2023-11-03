@@ -268,7 +268,7 @@
     // Fetchings
     function fetchProduk() {
       $.ajax({
-        url: 'http://tugas-16.rizalord.xyz/api/v2/products',
+        url: 'https://tugas-16.rizalord.xyz/api/v2/products',
         method: 'GET',
         success: function ({ data }) {
           produkDatatable.clear()
@@ -322,7 +322,7 @@
       let tempBahan = [];
 
       $.ajax({
-        url: `http://tugas-16.rizalord.xyz/api/v2/products/${kode}/ingredients`,
+        url: `https://tugas-16.rizalord.xyz/api/v2/products/${kode}/ingredients`,
         method: 'GET',
         async: false,
         success: function ({ data }) {
@@ -405,7 +405,7 @@
       }
 
       $.ajax({
-        url: `http://tugas-16.rizalord.xyz/api/v2/products/${selectedProduk.kode}/ingredients`,
+        url: `https://tugas-16.rizalord.xyz/api/v2/products/${selectedProduk.kode}/ingredients`,
         method: 'POST',
         async: false,
         data: {
