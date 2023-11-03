@@ -1,2 +1,2 @@
-## Mentoring 18 - Javascript DOM Manipulation dan event
-Tugas Mentoring belajar mengenai DOM Manipulation dan event pada Javascript menggunakan JQuery
+## Mentoring 19 - Javascript Async dan Synchronous, Fetch API
+Tugas Mentoring belajar mengenai Javascript Async dan Synchronous dan juga menggunakan Fetch API

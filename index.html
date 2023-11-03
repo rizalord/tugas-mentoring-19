@@ -9,7 +9,7 @@
   <meta name="description" content="CoreUI - Open Source Bootstrap Admin Template">
   <meta name="author" content="Ahmad Rizal Khamdani">
   <meta name="keyword" content="Bootstrap,Admin,Template,Open,Source,jQuery,CSS,HTML,RWD,Dashboard">
-  <title>Tugas Mentoring 18</title>
+  <title>Tugas Mentoring 19</title>
   <meta name="theme-color" content="#ffffff">
   <!-- Vendors styles-->
   <link rel="stylesheet" href="vendors/simplebar/css/simplebar.css">
@@ -124,7 +124,7 @@
         </div>
 
         <div class="d-flex justify-content-end">
-          <button class="btn btn-primary" id="btnCetak">Cetak</button>
+          <button class="btn btn-primary" id="btnProses">Proses</button>
         </div>
       </div>
     </div>
@@ -200,49 +200,18 @@
     </div>
   </div>
 
-  <div class="modal fade" id="cetakModal" tabindex="-1" role="dialog" aria-labelledby="cetakModalLabel"
+  <div class="modal fade" id="prosesModal" tabindex="-1" role="dialog" aria-labelledby="prosesModalLabel"
     aria-hidden="true">
-    <div class="modal-dialog modal-xl" role="document">
+    <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="cetakModalLabel">Cetak</h5>
+          <h5 class="modal-title" id="prosesModalLabel">Proses Berhasil</h5>
           <button type="button" class="close" data-coreui-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
         <div class="modal-body">
-          <table>
-            <tr>
-              <td>Kode Produk</td>
-              <td>:</td>
-              <td id="cetakKodeProduk"></td>
-            </tr>
-            <tr>
-              <td>Nama Produk</td>
-              <td>:</td>
-              <td id="cetakNamaProduk"></td>
-            </tr>
-            <tr>
-              <td>Jumlah Produk</td>
-              <td>:</td>
-              <td id="cetakJumlahProduk"></td>
-            </tr>
-          </table>
-
-          <hr />
-
-          <table id="cetakBahanTable" class="mt-2" style="width:100%">
-            <thead>
-              <tr>
-                <th>Kode Bahan</th>
-                <th>Nama Bahan</th>
-                <th>Jumlah</th>
-              </tr>
-            </thead>
-            <tbody>
-
-            </tbody>
-          </table>
+          Produk beserta bahan yang dibutuhkan telah berhasil diproses
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-coreui-dismiss="modal">Close</button>
@@ -267,7 +236,6 @@
     let produkTable = null
     let bahanTable = null
     let selectedBahanTable = null
-    let cetakBahanTable = null
     let produkContainer = null
     let bahanContainer = null
     let btnPilihProduk = null
@@ -278,13 +246,11 @@
     let produkDatatable = null
     let bahanDatatable = null
     let selectedBahanDatatable = null
-    let cetakBahanDatatable = null
 
     function init() {
       produkTable = $('#produkTable')
       bahanTable = $('#bahanTable')
       selectedBahanTable = $('#selectedBahanTable')
-      cetakBahanTable = $('#cetakBahanTable')
       produkContainer = $('#produkContainer')
       bahanContainer = $('#bahanContainer')
       btnPilihProduk = $('#btnPilihProduk')
@@ -294,7 +260,6 @@
       produkDatatable = produkTable.DataTable()
       bahanDatatable = bahanTable.DataTable()
       selectedBahanDatatable = selectedBahanTable.DataTable()
-      cetakBahanDatatable = cetakBahanTable.DataTable()
 
       fetchProduk()
       fetchBahan()
@@ -303,10 +268,16 @@
     // Fetchings
     function fetchProduk() {
       $.ajax({
-        url: window.location.origin + window.location.pathname + '/data/produk.json',
+        url: 'http://tugas-16.rizalord.xyz/api/v2/products',
         method: 'GET',
         success: function ({ data }) {
           produkDatatable.clear()
+
+          data = data.map((item) => ({
+            kode: item.product_id,
+            nama: item.product_name,
+            jumlah: item.quantity
+          }))
 
           data.forEach((item) => {
             produk.push(item)
@@ -347,6 +318,29 @@
       })
     }
 
+    function fetchProdukBahan(kode) {
+      let tempBahan = [];
+
+      $.ajax({
+        url: `http://tugas-16.rizalord.xyz/api/v2/products/${kode}/ingredients`,
+        method: 'GET',
+        async: false,
+        success: function ({ data }) {
+          produkDatatable.clear()
+
+          tempBahan = data.map((item) => ({
+            kode: item.kode,
+            nama: item.nama,
+            jumlah: item.qty
+          }))
+
+          tempBahan = tempBahan.filter((item) => bahan.find((bahanItem) => bahanItem.kode === item.kode))
+        }
+      })
+
+      return tempBahan
+    }
+    
     // Events
     $('#btnPilihBahan').click(function () {
       if (!selectedProduk) {
@@ -397,7 +391,7 @@
       selectedBahan = null
     })
 
-    $('#btnCetak').click(function () {
+    $('#btnProses').click(function () {
       if (!selectedProduk) {
         return alert('Pilih produk terlebih dahulu')
       }
@@ -410,23 +404,24 @@
         return alert('Pilih bahan terlebih dahulu')
       }
 
-      $('#cetakKodeProduk').text(selectedProduk.kode)
-      $('#cetakNamaProduk').text(selectedProduk.nama)
-      $('#cetakJumlahProduk').text(selectedProduk.jumlah)
-
-      cetakBahanDatatable.clear()
-
-      selectedBahanList.forEach((item) => {
-        cetakBahanDatatable.row.add([
-          item.kode,
-          item.nama,
-          item.jumlah
-        ])
+      $.ajax({
+        url: `http://tugas-16.rizalord.xyz/api/v2/products/${selectedProduk.kode}/ingredients`,
+        method: 'POST',
+        async: false,
+        data: {
+          data: selectedBahanList.map((item) => ({
+            kode: item.kode,
+            nama: item.nama,
+            qty: item.jumlah
+          }))
+        },
+        success: function ({ data }) {
+          $('#prosesModal').modal('show')
+        },
+        error: function (err) {
+          alert('Terjadi kesalahan dalam memproses data')
+        }
       })
-
-      cetakBahanDatatable.draw()
-
-      $('#cetakModal').modal('show')
     })
 
     // On Select and Remove
@@ -443,7 +438,22 @@
       if (selectedProduk != tempSelectedProduk) {
         selectedBahanList.forEach(() => selectedBahanList.pop())
         selectedBahanDatatable.clear()
-      }
+
+        let bahan = fetchProdukBahan(kode)
+
+        bahan.forEach((item) => {
+          selectedBahanList.push(item)
+
+          selectedBahanDatatable.row.add([
+            item.kode,
+            item.nama,
+            item.jumlah,
+            `<button class="btn btn-danger text-white" onclick="removeBahan('${item.kode}')">Hapus</button>`
+          ])
+        })
+
+        selectedBahanDatatable.draw()
+      } 
 
       selectedProduk = tempSelectedProduk
 
