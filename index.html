@@ -147,6 +147,11 @@
           </button>
         </div>
         <div class="modal-body">
+          <div class="d-flex justify-content-end mb-2">
+            <button class="btn btn-primary" data-coreui-toggle="modal" data-coreui-target="#tambahProdukModal">Tambah
+              Produk</button>
+          </div>
+
           <table id="produkTable" class="display" style="width:100%">
             <thead>
               <tr>
@@ -200,6 +205,61 @@
     </div>
   </div>
 
+  <div class="modal fade" id="tambahProdukModal" tabindex="-1" role="dialog" aria-labelledby="tambahProdukModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+      <form>
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="tambahProdukModalLabel">Tambah Produk</h5>
+            <button type="button" class="close" data-coreui-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label for="add_product_name">Nama Produk</label>
+                <input type="text" class="form-control" placeholder="Nama Produk" name="product_name"
+                  id="add_product_name">
+              </div>
+              <div class="col-md-6 mb-3">
+                <label for="add_category_id">Kategori</label>
+                <select class="form-control" name="category_id" id="add_category_id">
+                  <option value="">-- Pilih Kategori --</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label for="add_quantity">Stok</label>
+                <input type="number" class="form-control" placeholder="Stok" name="quantity" id="add_quantity">
+              </div>
+
+              <div class="col-md-6 mb-3">
+                <label for="add_price">Harga</label>
+                <input type="number" class="form-control" placeholder="Harga" name="price" id="add_price">
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col mb-3">
+                <label for="add_description">Deskripsi</label>
+                <textarea class="form-control" placeholder="Deskripsi" name="description"
+                  id="add_description"></textarea>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-coreui-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary" id="btnTambahProduk">Tambah</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
   <div class="modal fade" id="prosesModal" tabindex="-1" role="dialog" aria-labelledby="prosesModalLabel"
     aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -231,6 +291,7 @@
     let selectedProduk = null
     let selectedBahan = null
     let selectedBahanList = []
+    let categories = []
 
     // Elements
     let produkTable = null
@@ -263,6 +324,7 @@
 
       fetchProduk()
       fetchBahan()
+      fetchKategori()
     }
 
     // Fetchings
@@ -286,7 +348,10 @@
               item.kode,
               item.nama,
               item.jumlah,
-              `<button class="btn btn-primary" onclick="selectProduk('${item.kode}')">Pilih</button>`
+              `<div>
+                  <button class="btn btn-primary mr-2" onclick="selectProduk('${item.kode}')">Pilih</button>
+                  <button class="btn btn-danger text-white" onclick="removeProduk('${item.kode}')">Hapus</button>
+              </div>`
             ])
           })
 
@@ -319,7 +384,7 @@
     }
 
     function fetchProdukBahan(kode) {
-      let tempBahan = [];
+      let tempBahan = []
 
       $.ajax({
         url: `https://tugas-16.rizalord.xyz/api/v2/products/${kode}/ingredients`,
@@ -340,7 +405,21 @@
 
       return tempBahan
     }
-    
+
+    function fetchKategori() {
+      $.ajax({
+        url: 'https://tugas-16.rizalord.xyz/api/v2/categories',
+        method: 'GET',
+        success: function ({ data }) {
+          categories = data
+
+          categories.forEach((item) => {
+            $('#add_category_id').append(`<option value="${item.category_id}">${item.category_name}</option>`)
+          })
+        }
+      })
+    }
+
     // Events
     $('#btnPilihBahan').click(function () {
       if (!selectedProduk) {
@@ -424,6 +503,59 @@
       })
     })
 
+    $('#btnTambahProduk').click(function () {
+      const nama = $('#add_product_name').val()
+      const kategori = $('#add_category_id').val()
+      const stok = $('#add_quantity').val()
+      const harga = $('#add_price').val()
+      const deskripsi = $('#add_description').val()
+
+      if (!nama) {
+        return alert('Masukkan nama produk terlebih dahulu')
+      }
+
+      if (!kategori) {
+        return alert('Pilih kategori terlebih dahulu')
+      }
+
+      if (!stok) {
+        return alert('Masukkan stok terlebih dahulu')
+      }
+
+      if (!harga) {
+        return alert('Masukkan harga terlebih dahulu')
+      }
+
+      if (!deskripsi) {
+        return alert('Masukkan deskripsi terlebih dahulu')
+      }
+
+      const formData = new FormData()
+      formData.append('product_name', nama)
+      formData.append('category_id', kategori)
+      formData.append('quantity', stok)
+      formData.append('price', harga)
+      formData.append('description', deskripsi)
+
+      $.ajax({
+        url: 'https://tugas-16.rizalord.xyz/api/v2/products',
+        method: 'POST',
+        data: formData,
+        processData: false,
+        contentType: false,
+        success: function ({ data }) {
+          $('#tambahProdukModal').modal('hide')
+
+          alert('Produk berhasil ditambahkan')
+
+          fetchProduk()
+        },
+        error: function (err) {
+          alert('Terjadi kesalahan dalam menambahkan produk')
+        }
+      })
+    })
+
     // On Select and Remove
     function selectProduk(kode) {
       const tempSelectedProduk = produk.find((item) => item.kode === kode)
@@ -453,7 +585,7 @@
         })
 
         selectedBahanDatatable.draw()
-      } 
+      }
 
       selectedProduk = tempSelectedProduk
 
@@ -502,10 +634,49 @@
       selectedBahanDatatable.draw()
     }
 
+    function removeProduk(kode) {
+      const tempSelectedProduk = produk.find((item) => item.kode === kode)
+
+      const konfirmasi = confirm('Apakah anda yakin ingin menghapus produk ini?')
+
+      if (!konfirmasi) {
+        return
+      }
+
+      $.ajax({
+        url: `https://tugas-16.rizalord.xyz/api/v2/products/${kode}`,
+        method: 'DELETE',
+        success: function ({ data }) {
+          alert('Produk berhasil dihapus')
+
+          if (tempSelectedProduk === selectedProduk) {
+            selectedProduk = null
+
+            produkContainer.find('input').each(function (index, item) {
+              const input = $(item)
+              const name = input.attr('name')
+
+              input.val('')
+            })
+
+            selectedBahanList.forEach(() => selectedBahanList.pop())
+            selectedBahanDatatable.clear()
+            selectedBahanDatatable.draw()
+          }
+
+          fetchProduk()
+        },
+        error: function (err) {
+          alert('Terjadi kesalahan dalam menghapus produk')
+        }
+      })
+    }
+    
     $(document).ready(function () {
       init()
     });
   </script>
+
 
 </body>
 
